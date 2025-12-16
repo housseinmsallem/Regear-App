@@ -37,7 +37,7 @@ export default function MembersPage() {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 text-black">
       <h1 className="text-3xl font-bold">Members Management</h1>
 
       <div className="bg-white p-6 rounded-lg shadow">
