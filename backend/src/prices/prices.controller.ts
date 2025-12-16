@@ -57,9 +57,10 @@ export class PricesController {
       stream
         .pipe(
           csvParser({
+            skipLines: 2,
             headers: [
-              'Timing',
-              'ItemName',
+              'timing',
+              'itemName',
               'T7',
               'T8',
               'BW_4_3',
@@ -67,7 +68,7 @@ export class PricesController {
               'BW_5_3',
               'BW_6_1',
               'BW_6_2',
-              'BW_last_Checked',
+              'BW_lastChecked',
               'FS_4_3',
               'FS_5_2',
               'FS_5_3',
@@ -79,30 +80,30 @@ export class PricesController {
           }),
         )
         .on('data', (row) => {
+          if (!row.itemName || row.itemName.trim() === '') return;
+
           prices.push({
-            timing: row['Timing'] ? row['Timing'] : 'Never',
-            itemName: row['ItemName'] ? row['ItemName'] : 'None',
-            T7: parseInt(row['T7']?.replace(/[^\d]/g, '') || '0', 10),
-            T8: parseInt(row['T8']?.replace(/[^\d]/g, '') || '0', 10),
-            BW_4_3: parseInt(row['BW_4_3']?.replace(/[^\d]/g, '') || '0', 10),
-            BW_5_2: parseInt(row['BW_5_2']?.replace(/[^\d]/g, '') || '0', 10),
-            BW_5_3: parseInt(row['BW_5_3']?.replace(/[^\d]/g, '') || '0', 10),
-            BW_6_1: parseInt(row['BW_6_1']?.replace(/[^\d]/g, '') || '0', 10),
-            BW_6_2: parseInt(row['BW_6_2']?.replace(/[^\d]/g, '') || '0', 10),
-            BW_lastChecked: row['BW_last_Checked']
-              ? parseDateFromDDMMYYYY(row['BW_last_Checked'])
+            timing: row.timing || 'Never',
+            itemName: row.itemName || 'None',
+            T7: parseInt((row.T7 || '0').toString().replace(/[^\d]/g, '') || '0', 10),
+            T8: parseInt((row.T8 || '0').toString().replace(/[^\d]/g, '') || '0', 10),
+            BW_4_3: parseInt((row.BW_4_3 || '0').toString().replace(/[^\d]/g, '') || '0', 10),
+            BW_5_2: parseInt((row.BW_5_2 || '0').toString().replace(/[^\d]/g, '') || '0', 10),
+            BW_5_3: parseInt((row.BW_5_3 || '0').toString().replace(/[^\d]/g, '') || '0', 10),
+            BW_6_1: parseInt((row.BW_6_1 || '0').toString().replace(/[^\d]/g, '') || '0', 10),
+            BW_6_2: parseInt((row.BW_6_2 || '0').toString().replace(/[^\d]/g, '') || '0', 10),
+            BW_lastChecked: row.BW_lastChecked
+              ? parseDateFromDDMMYYYY(row.BW_lastChecked)
               : 'Never',
-            FS_4_3: parseInt(row['FS_4_3']?.replace(/[^\d]/g, '') || '0', 10),
-            FS_5_2: parseInt(row['FS_5_2']?.replace(/[^\d]/g, '') || '0', 10),
-            FS_5_3: parseInt(row['FS_5_3']?.replace(/[^\d]/g, '') || '0', 10),
-            FS_6_1: parseInt(row['FS_6_1']?.replace(/[^\d]/g, '') || '0', 10),
-            FS_6_2: parseInt(row['FS_6_2']?.replace(/[^\d]/g, '') || '0', 10),
-            FS_last_Checked: row['FS_last_Checked']
-              ? parseDateFromDDMMYYYY(row['FS_last_Checked'])
+            FS_4_3: parseInt((row.FS_4_3 || '0').toString().replace(/[^\d]/g, '') || '0', 10),
+            FS_5_2: parseInt((row.FS_5_2 || '0').toString().replace(/[^\d]/g, '') || '0', 10),
+            FS_5_3: parseInt((row.FS_5_3 || '0').toString().replace(/[^\d]/g, '') || '0', 10),
+            FS_6_1: parseInt((row.FS_6_1 || '0').toString().replace(/[^\d]/g, '') || '0', 10),
+            FS_6_2: parseInt((row.FS_6_2 || '0').toString().replace(/[^\d]/g, '') || '0', 10),
+            FS_last_Checked: row.FS_last_Checked
+              ? parseDateFromDDMMYYYY(row.FS_last_Checked)
               : 'Never',
-            alternativeTier: row['alternativeTier']
-              ? row['alternativeTier']
-              : 'None',
+            alternativeTier: row.alternativeTier || 'None',
           });
         })
         .on('end', async () => {
