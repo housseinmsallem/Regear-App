@@ -14,7 +14,7 @@ import { Price } from './prices/entities/price.entity';
     ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
       type: 'sqlite',
-      database: 'manouba.db',
+      database: 'regears.db',
       entities: [Price, Member],
       autoLoadEntities: true,
       synchronize: true,

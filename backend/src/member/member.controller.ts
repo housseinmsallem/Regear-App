@@ -52,15 +52,15 @@ export class MemberController {
       const stream = createReadStream(file.path); // Use the file's path to read the file
 
       stream
-        .pipe(csvParser())
+        .pipe(csvParser({ headers: ['username', 'payout'] }))
         .on('data', (row) => {
           console.log(row);
+          if (!row.username || row.username.trim() === '') return; // Skip empty rows
+
           members.push({
             username: row.username,
-            payout: parseInt(row.payout.replace(/[^\d]/g, '') || '0', 10),
-            lastPayoutDue: row.lastPayoutDue
-              ? new Date(row.lastPayoutDue)
-              : new Date(),
+            payout: parseInt((row.payout || '0').toString().replace(/[^\d]/g, '') || '0', 10),
+            lastPayoutDue: new Date(),
             dateJoined: new Date(),
           });
         })
