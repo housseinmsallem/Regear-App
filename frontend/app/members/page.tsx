@@ -90,6 +90,20 @@ export default function MembersPage() {
     });
   };
 
+  const handleProcessPayout = async (username: string) => {
+    if (!confirm(`Process payout for ${username}? This will reset their payout to 0.`)) return;
+    setLoading(true);
+    try {
+      await api.members.processPayout(username);
+      fetchMembers();
+    } catch (error) {
+      console.error('Failed to process payout:', error);
+      alert('Failed to process payout');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="space-y-8 text-black pb-12">
       <h1 className="text-3xl font-bold">Members Management</h1>
@@ -204,11 +218,18 @@ export default function MembersPage() {
             {members.map((member, idx) => (
               <tr key={idx} className="border-b hover:bg-gray-50">
                 <td className="py-2 px-4">{member.username}</td>
-                <td className="py-2 px-4">{member.payout.toLocaleString()}</td>
+                <td className="py-2 px-4 font-bold">{member.payout.toLocaleString()}</td>
                 <td className="py-2 px-4">{new Date(member.lastPayoutDue).toLocaleDateString()}</td>
                 <td className="py-2 px-4">{new Date(member.dateJoined).toLocaleDateString()}</td>
                 <td className="py-2 px-4">
                   <div className="flex gap-2">
+                    <button 
+                      onClick={() => handleProcessPayout(member.username)}
+                      disabled={member.payout <= 0 || loading}
+                      className="bg-green-100 text-green-700 px-2 py-1 rounded text-sm hover:bg-green-200 disabled:opacity-50"
+                    >
+                      Process Payout
+                    </button>
                     <button 
                       onClick={() => startEdit(member)}
                       className="text-blue-600 hover:text-blue-800"

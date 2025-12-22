@@ -70,6 +70,13 @@ export const api = {
       });
       if (!res.ok) throw new Error('Failed to delete member');
       return res.json();
+    },
+    processPayout: async (username: string) => {
+      const res = await fetch(`${API_BASE_URL}/member/${username}/payout`, {
+        method: 'POST',
+      });
+      if (!res.ok) throw new Error('Failed to process payout');
+      return res.json();
     }
   },
   prices: {

@@ -118,4 +118,9 @@ export class MemberController {
   remove(@Param('username') username: string) {
     return this.memberService.delete(username);
   }
+
+  @Post(':username/payout')
+  processPayout(@Param('username') username: string) {
+    return this.memberService.processPayout(username);
+  }
 }
