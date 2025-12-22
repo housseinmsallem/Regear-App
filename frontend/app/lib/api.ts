@@ -47,13 +47,29 @@ export const api = {
       return res.json();
     },
     create: async (data: Partial<Member>) => {
-        const res = await fetch(`${API_BASE_URL}/member`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data),
-        });
-        if (!res.ok) throw new Error('Failed to create member');
-        return res.json();
+      const res = await fetch(`${API_BASE_URL}/member`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      if (!res.ok) throw new Error('Failed to create member');
+      return res.json();
+    },
+    update: async (username: string, data: Partial<Member>) => {
+      const res = await fetch(`${API_BASE_URL}/member/${username}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      if (!res.ok) throw new Error('Failed to update member');
+      return res.json();
+    },
+    delete: async (username: string) => {
+      const res = await fetch(`${API_BASE_URL}/member/${username}`, {
+        method: 'DELETE',
+      });
+      if (!res.ok) throw new Error('Failed to delete member');
+      return res.json();
     }
   },
   prices: {
@@ -72,14 +88,30 @@ export const api = {
       if (!res.ok) throw new Error('Failed to upload prices');
       return res.json();
     },
-     create: async (data: Partial<Price>) => {
-        const res = await fetch(`${API_BASE_URL}/prices`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data),
-        });
-        if (!res.ok) throw new Error('Failed to create price');
-        return res.json();
+    create: async (data: Partial<Price>) => {
+      const res = await fetch(`${API_BASE_URL}/prices`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      if (!res.ok) throw new Error('Failed to create price');
+      return res.json();
+    },
+    update: async (id: number, data: Partial<Price>) => {
+      const res = await fetch(`${API_BASE_URL}/prices/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      if (!res.ok) throw new Error('Failed to update price');
+      return res.json();
+    },
+    delete: async (id: number) => {
+      const res = await fetch(`${API_BASE_URL}/prices/${id}`, {
+        method: 'DELETE',
+      });
+      if (!res.ok) throw new Error('Failed to delete price');
+      return res.json();
     }
   },
 };
